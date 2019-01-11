@@ -1,0 +1,3 @@
+# SpringNamedParameterJdbcDaoSupportUsingXMLConfiguration-NamedParameterJDBCTemplate
+
+NamedParameterJdbcDaoSupportUsingXML
