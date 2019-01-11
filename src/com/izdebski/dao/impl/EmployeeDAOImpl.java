@@ -5,16 +5,18 @@ import java.util.List;
 import com.izdebski.dao.EmployeeDAO;
 import com.izdebski.model.Employee;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-public class EmployeeDAOImpl implements EmployeeDAO {
+public class EmployeeDAOImpl extends NamedParameterJdbcDaoSupport implements EmployeeDAO {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public void setNamedParameterJdbcTemplate(
+    /* public void setNamedParameterJdbcTemplate(
             NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-    }
+    } */
+
 
     @Override
     public Employee getEmployeeById(int employeeId) {
@@ -24,7 +26,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         MapSqlParameterSource inputMap = new MapSqlParameterSource();
         inputMap.addValue("empId", employeeId);
 
-        Employee employee = namedParameterJdbcTemplate.queryForObject(SQL, inputMap, new EmployeeRowMapper());
+        Employee employee = getNamedParameterJdbcTemplate().queryForObject(SQL, inputMap, new EmployeeRowMapper());
         return employee;
     }
 
@@ -49,7 +51,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         inputMap.addValue("empId", employeeId);
         inputMap.addValue("newEmail", newEmail);
 
-        int update = namedParameterJdbcTemplate.update(SQL, inputMap);
+        int update = getNamedParameterJdbcTemplate().update(SQL, inputMap);
         if(update>0)
             System.out.println("Email is updated..");
 
@@ -59,7 +61,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public List<Employee> getAllEmployeesDetails() {
         String SQL="SELECT *FROM employee_table";
 
-        List<Employee> empLst = namedParameterJdbcTemplate.query(SQL, new EmployeeRowMapper());
+        List<Employee> empLst = getNamedParameterJdbcTemplate().query(SQL, new EmployeeRowMapper());
         return empLst;
     }
 
@@ -74,7 +76,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         inputMap.addValue("gender", employee.getGender());
         inputMap.addValue("sal", employee.getSalary());
 
-        int update = namedParameterJdbcTemplate.update(SQL, inputMap);
+        int update = getNamedParameterJdbcTemplate().update(SQL, inputMap);
 
         if(update>0)
             System.out.println("Employee is created...");
